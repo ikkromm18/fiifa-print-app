@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KategoriProdukController;
+use App\Http\Controllers\ProdukController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,9 +19,11 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/kategori_produk', [KategoriProdukController::class, 'index'])->name('kategori_produk.index');
+    Route::get('/produk', [ProdukController::class, 'index'])->name('produk.index');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
 
     Route::get('/adminpage', function () {
         return view('admin.pageadmin');
@@ -30,4 +35,7 @@ Route::middleware(['role:owner'])->group(function () {
     Route::get('/owner', function () {
         return view('admin.pageowner');
     })->name('owner');
+
+    Route::resource('kategori_produk', KategoriProdukController::class)->except(['index', 'show']);
+    Route::resource('produk', ProdukController::class)->except(['index', 'show']);
 });

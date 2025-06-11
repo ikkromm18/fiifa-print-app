@@ -28,4 +28,19 @@ class AuthController extends Controller
             return back()->with('error', 'Email atau Password Salah');
         }
     }
+
+    public function logout(Request $request)
+    {
+
+        // Logout
+        Auth::logout();
+
+        // Hapus Session Lama
+        $request->session()->invalidate();
+
+        // Reset CSRF Token
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login')->with('success', 'Log Out Berhasil');
+    }
 }
