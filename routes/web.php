@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\KategoriProdukController;
 use App\Http\Controllers\ProdukController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/kategori_produk', [KategoriProdukController::class, 'index'])->name('kategori_produk.index');
     Route::get('/produk', [ProdukController::class, 'index'])->name('produk.index');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/karyawan', [KaryawanController::class, 'index'])->name('karyawan.index');
 
 
     Route::get('/adminpage', function () {
@@ -38,4 +40,5 @@ Route::middleware(['role:owner'])->group(function () {
 
     Route::resource('kategori_produk', KategoriProdukController::class)->except(['index', 'show']);
     Route::resource('produk', ProdukController::class)->except(['index', 'show']);
+    Route::resource('karyawan', KaryawanController::class)->except(['index', 'show']);
 });

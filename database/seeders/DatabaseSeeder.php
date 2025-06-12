@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Produk;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,6 +16,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
+
+
 
         DB::table('users')->insert([
             'name' => 'Admin',
@@ -36,7 +39,10 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             KategoriProdukSeeder::class,
-            ProdukSeeder::class
+            ProdukSeeder::class,
+            KaryawanSeeder::class
         ]);
+
+        Produk::factory()->count(70)->create();
     }
 }
