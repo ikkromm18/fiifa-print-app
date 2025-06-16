@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Produk;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -23,5 +24,7 @@ class ProdukSeeder extends Seeder
         ];
 
         DB::table('produks')->insert($data);
+
+        Produk::factory()->count(70)->create();
     }
 }

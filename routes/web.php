@@ -5,6 +5,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\KategoriProdukController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\TransaksiItemController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -25,6 +27,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/produk', [ProdukController::class, 'index'])->name('produk.index');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/karyawan', [KaryawanController::class, 'index'])->name('karyawan.index');
+
+    Route::resource('transaksi', TransaksiController::class)->except(['show', 'destroy']);
+    Route::resource('transaksi_item', TransaksiItemController::class)->except('destroy');
+
+    Route::get('/transaksi/{id}/detail', [TransaksiController::class, 'show'])->name('transaksi.show');
+
+    Route::get('/transaksi/{id}/print', [TransaksiController::class, 'print'])->name('transaksi.print');
+
 
 
     Route::get('/adminpage', function () {

@@ -40,9 +40,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             KategoriProdukSeeder::class,
             ProdukSeeder::class,
-            KaryawanSeeder::class
+            KaryawanSeeder::class,
+            TransaksiSeeder::class,
+            TransaksiItemSeeder::class
         ]);
-
-        Produk::factory()->count(70)->create();
     }
 }

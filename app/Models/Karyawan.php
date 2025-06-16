@@ -14,4 +14,9 @@ class Karyawan extends Model
         'alamat',
         'no_hp'
     ];
+
+    public function transaksi()
+    {
+        return $this->hasMany(Transaksi::class, 'karyawans_id');
+    }
 }
