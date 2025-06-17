@@ -2,7 +2,7 @@
 @section('title', 'Tambah Transaksi')
 
 @section('content')
-    <div class="max-w-3xl mx-auto bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+    <div class="w-full mx-auto bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
         <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">Form Tambah Transaksi</h2>
 
         <form action="{{ route('transaksi.store') }}" method="POST">
@@ -49,7 +49,8 @@
             </div>
 
             <button type="button" onclick="addProduk()"
-                class="mb-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">+ Produk</button>
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">+
+                Produk</button>
 
             {{-- Jumlah Bayar --}}
             <div class="mb-4">
@@ -74,9 +75,23 @@
     </div>
 
     <script>
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(angka);
+        }
+
         function addProduk() {
             const produkItem = document.querySelector('.produk-item').cloneNode(true);
-            produkItem.querySelectorAll('input').forEach(input => input.value = '');
+            produkItem.querySelectorAll('input').forEach(input => {
+                input.value = '';
+                input.removeAttribute('readonly');
+                if (input.name === 'hargas[]' || input.name === 'subtotals[]') {
+                    input.setAttribute('readonly', true);
+                }
+            });
             document.getElementById('produk-container').appendChild(produkItem);
         }
 
@@ -97,16 +112,49 @@
                 hargaInput.value = harga;
                 subtotalInput.value = subtotal;
 
+                hargaInput.setAttribute('data-formatted', formatRupiah(harga));
+                subtotalInput.setAttribute('data-formatted', formatRupiah(subtotal));
+
+                hargaInput.previousElementSibling?.remove(); // Remove if exists
+                subtotalInput.previousElementSibling?.remove();
+
+                const hargaLabel = document.createElement('div');
+                hargaLabel.className = 'text-sm text-gray-600 mb-1';
+                hargaLabel.textContent = formatRupiah(harga);
+                hargaInput.parentNode.insertBefore(hargaLabel, hargaInput);
+
+                const subtotalLabel = document.createElement('div');
+                subtotalLabel.className = 'text-sm text-gray-600 mb-1';
+                subtotalLabel.textContent = formatRupiah(subtotal);
+                subtotalInput.parentNode.insertBefore(subtotalLabel, subtotalInput);
+
                 total += subtotal;
             });
 
             document.getElementById('total_bayar').value = total;
+            document.getElementById('kembalian').value = parseInt(document.getElementById('jumlah_bayar').value || 0) -
+                total;
 
-            const bayar = parseInt(document.getElementById('jumlah_bayar').value || 0);
-            document.getElementById('kembalian').value = bayar - total;
+            // Format Total Bayar dan Kembalian
+            document.getElementById('total_bayar').previousElementSibling?.remove();
+            document.getElementById('kembalian').previousElementSibling?.remove();
+
+            const totalLabel = document.createElement('div');
+            totalLabel.className = 'text-sm text-gray-600 mb-1';
+            totalLabel.textContent = formatRupiah(total);
+            document.getElementById('total_bayar').parentNode.insertBefore(totalLabel, document.getElementById(
+                'total_bayar'));
+
+            const kembalian = parseInt(document.getElementById('jumlah_bayar').value || 0) - total;
+            const kembaliLabel = document.createElement('div');
+            kembaliLabel.className = 'text-sm text-gray-600 mb-1';
+            kembaliLabel.textContent = formatRupiah(kembalian);
+            document.getElementById('kembalian').parentNode.insertBefore(kembaliLabel, document.getElementById(
+                'kembalian'));
         }
 
         document.addEventListener('input', updateHargaDanSubtotal);
         document.addEventListener('change', updateHargaDanSubtotal);
     </script>
+
 @endsection

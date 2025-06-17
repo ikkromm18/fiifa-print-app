@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\KategoriProdukController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\TransaksiItemController;
@@ -35,7 +36,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/transaksi/{id}/print', [TransaksiController::class, 'print'])->name('transaksi.print');
 
-
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('/laporan/penjualan/pdf', [LaporanController::class, 'cetakPenjualan'])->name('laporan.penjualan.pdf');
+    Route::get('/laporan/keuangan/pdf', [LaporanController::class, 'cetakKeuangan'])->name('laporan.keuangan.pdf');
+    Route::get('/laporan/stok/pdf', [LaporanController::class, 'cetakStok'])->name('laporan.stok.pdf');
 
     Route::get('/adminpage', function () {
         return view('admin.pageadmin');

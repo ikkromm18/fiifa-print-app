@@ -70,6 +70,23 @@
             </li>
 
             <li>
+                <a href="{{ route('laporan.index') }}"
+                    class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-blue-600 dark:hover:bg-gray-700 group">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#fff"
+                        viewBox="0 0 24 24">
+                        <path fill-rule="evenodd"
+                            d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7ZM8 16a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H9a1 1 0 0 1-1-1Zm1-5a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Z"
+                            clip-rule="evenodd" />
+                    </svg>
+
+
+
+                    <span class="ms-3">Laporan</span>
+                </a>
+            </li>
+
+            <li>
                 <a href="{{ route('karyawan.index') }}"
                     class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-blue-600 dark:hover:bg-gray-700 group">
                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
@@ -85,7 +102,7 @@
                 </a>
             </li>
 
-            <li>
+            {{-- <li>
                 <a href="{{ route('admin') }}"
                     class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-blue-600 dark:hover:bg-gray-700 group">
                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
@@ -113,7 +130,7 @@
 
                     <span class="ms-3">Owner Fiifa</span>
                 </a>
-            </li>
+            </li> --}}
 
         </ul>
     </div>
