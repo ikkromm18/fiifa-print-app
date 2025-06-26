@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/karyawan', [KaryawanController::class, 'index'])->name('karyawan.index');
 
-    Route::resource('transaksi', TransaksiController::class)->except(['show', 'destroy']);
+    Route::resource('transaksi', TransaksiController::class)->except(['show']);
     Route::resource('transaksi_item', TransaksiItemController::class)->except('destroy');
 
     Route::get('/transaksi/{id}/detail', [TransaksiController::class, 'show'])->name('transaksi.show');

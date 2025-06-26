@@ -109,7 +109,7 @@
                                 </th>
                                 <th scope="row"
                                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ $item->created_at->format('Y-m-d H:i') }}
+                                    {{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y H:i') }}
                                 </th>
                                 <th class="px-6 py-4">
                                     {{ 'Rp ' . number_format($item->total_bayar, 0, ',', '.') }}

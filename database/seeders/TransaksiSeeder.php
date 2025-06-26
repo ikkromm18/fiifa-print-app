@@ -16,6 +16,7 @@ class TransaksiSeeder extends Seeder
     {
         $data = [
             [
+                'kode_transaksi' => '220625001',
                 'karyawans_id' => rand(1, 2),
                 'total_bayar' => 35000,
                 'jumlah_bayar' => 50000,

@@ -16,7 +16,9 @@ class TransaksiItemSeeder extends Seeder
     {
         $data = [
             [
+
                 'transaksi_id' => 1,
+
                 'produks_id' => rand(1, 50),
                 'quantity' => 2,
                 'harga' => 10000,
@@ -25,7 +27,9 @@ class TransaksiItemSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
+
                 'transaksi_id' => 1,
+
                 'produks_id' => rand(1, 50),
                 'quantity' => 3,
                 'harga' => 5000,

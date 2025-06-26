@@ -38,6 +38,7 @@
 <body onload="window.print()">
 
     <h2>STRUK PEMBAYARAN</h2>
+    <p>Kode Transaksi: {{ $transaksi->kode_transaksi }}</p>
     <p>Tanggal: {{ $transaksi->created_at->format('d/m/Y H:i') }}</p>
     <p>Kasir: {{ $transaksi->karyawan->nama_karyawan }}</p>
 
@@ -80,6 +81,9 @@
     </table>
 
     <p>Terima kasih telah berbelanja!</p>
+
+    <h2 style="text-align: center">FiiFa Print</h2>
+    <p>Jalan Lhiend, Kecamatan Comal, Kabupaten Pemalang</p>
 </body>
 
 </html>

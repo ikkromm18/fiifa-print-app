@@ -67,7 +67,7 @@
 
                             <th scope="row"
                                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {{ $transaksi->created_at }}
+                                {{ \Carbon\Carbon::parse($transaksi->created_at)->translatedFormat('d F Y H:i') }}
                             </th>
 
                             <th scope="row"
@@ -91,7 +91,7 @@
                             <td class="px-6 py-4 flex gap-2">
 
 
-                                <button onclick="showDetail({{ $transaksi->id }})"
+                                <button id="btnDetail" onclick="showDetail({{ $transaksi->id }})"
                                     class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Detail</button>
 
 
@@ -131,6 +131,10 @@
                     <div>
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Detail Transaksi</h3>
                         <p class="text-sm text-gray-600 dark:text-gray-400">
+                            Kode Transaksi : <span id="modal-kode_transaksi"
+                                class="font-medium text-gray-900 dark:text-white">-</span>
+                        </p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
                             Dilayani oleh: <span id="modal-karyawan"
                                 class="font-medium text-gray-900 dark:text-white">-</span>
                         </p>
@@ -167,14 +171,21 @@
                         Cetak
                     </button>
                     <div class="flex gap-2">
-                        <button id="btnEdit"
+                        <a id="btnEdit"
                             class="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5">
                             Edit
-                        </button>
-                        <button id="btnHapus"
-                            class="text-white bg-red-600 hover:bg-red-700 font-medium rounded-lg text-sm px-5 py-2.5">
-                            Hapus
-                        </button>
+                        </a>
+
+                        <form id="formHapusTransaksi" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                class="text-white bg-red-600 hover:bg-red-700 font-medium rounded-lg text-sm px-5 py-2.5">
+                                Hapus
+                            </button>
+                        </form>
+
+
                     </div>
                 </div>
             </div>
@@ -189,11 +200,16 @@
         function showDetail(id) {
             currentTransaksiId = id; // simpan id saat ini
 
+            document.getElementById('btnEdit').href = `/transaksi/${id}/edit`;
+
+            document.getElementById('formHapusTransaksi').action = `/transaksi/${id}`;
+
             fetch(`/transaksi/${id}/detail`)
                 .then(response => response.json())
                 .then(data => {
                     const transaksi = data.transaksi;
 
+                    document.getElementById('modal-kode_transaksi').textContent = transaksi.kode_transaksi;
                     document.getElementById('modal-karyawan').textContent = transaksi.karyawan.nama_karyawan;
                     document.getElementById('modal-tanggal').textContent = new Date(transaksi.created_at)
                         .toLocaleString();
