@@ -62,7 +62,17 @@
                             </td>
                             <th scope="row"
                                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {{ $produk->kategori_produks->nama }}
+
+                                @if ($produk->kategori_produks->nama === 'Barang')
+                                    <span
+                                        class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-blue-900 dark:text-blue-300">
+                                        {{ $produk->kategori_produks->nama }}</span>
+                                @else
+                                    <span
+                                        class="bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-purple-900 dark:text-purple-300">
+                                        {{ $produk->kategori_produks->nama }}</span>
+                                @endif
+
                             </th>
 
                             <th scope="row"
@@ -75,6 +85,15 @@
                             </td>
 
                             <td scope="row" class="px-6 py-4 text-gray-900">
+
+                                @if ($produk->stok === 0)
+                                    <div class="inline-block w-4 h-4 mr-2 bg-red-600 rounded-full"></div>
+                                @elseif ($produk->stok > 0 && $produk->stok < 11)
+                                    <div class="inline-block w-4 h-4 mr-2 bg-yellow-600 rounded-full"></div>
+                                @elseif ($produk->stok > 10)
+                                    <div class="inline-block w-4 h-4 mr-2 bg-green-600 rounded-full"></div>
+                                @endif
+
                                 {{ $produk->stok }}
                             </td>
 
