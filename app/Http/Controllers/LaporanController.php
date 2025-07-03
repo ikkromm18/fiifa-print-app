@@ -23,10 +23,32 @@ class LaporanController extends Controller
 
 
         $penjualan = Transaksi::whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])->get();
+
+        // Total keseluruhan
         $totalKeuangan = $penjualan->sum('total_bayar');
+
+        // Dikelompokkan berdasarkan tanggal
+        $keuanganPerTanggal = $penjualan
+            ->groupBy(function ($item) {
+                return $item->created_at->format('Y-m-d');
+            })
+            ->map(function ($group) {
+                return [
+                    'tanggal' => $group->first()->created_at->format('Y-m-d'),
+                    'total' => $group->sum('total_bayar'),
+                ];
+            });
+
         $stok = Produk::all();
 
-        return view('admin.laporan.laporan-index', compact('penjualan', 'totalKeuangan', 'stok', 'from', 'to'));
+        return view('admin.laporan.laporan-index', compact(
+            'penjualan',
+            'totalKeuangan',
+            'stok',
+            'from',
+            'to',
+            'keuanganPerTanggal'
+        ));
     }
 
     public function cetakPenjualan(Request $request)

@@ -126,11 +126,34 @@
         </div>
 
         <div id="keuangan" class="hidden p-4 bg-white rounded-lg dark:bg-gray-800" role="tabpanel">
-
-
             <x-add-button href="{{ route('laporan.keuangan.pdf', ['from' => $from, 'to' => $to]) }}" label="Cetak PDF" />
 
-            <p class="mt-4">Total Pemasukan: <strong>Rp {{ number_format($totalKeuangan, 0, ',', '.') }}</strong></p>
+            <div class="relative overflow-x-auto mt-4">
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">Tanggal</th>
+                            <th scope="col" class="px-6 py-3">Total Pemasukan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($keuanganPerTanggal as $data)
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <td class="px-6 py-4">
+                                    {{ \Carbon\Carbon::parse($data['tanggal'])->translatedFormat('d F Y') }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    Rp {{ number_format($data['total'], 0, ',', '.') }}
+                                </td>
+                            </tr>
+                        @endforeach
+                        <tr class="bg-gray-100 font-semibold dark:bg-gray-700">
+                            <td class="px-6 py-4">Total Keseluruhan</td>
+                            <td class="px-6 py-4">Rp {{ number_format($totalKeuangan, 0, ',', '.') }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div id="stok" class="hidden p-4 bg-white rounded-lg dark:bg-gray-800" role="tabpanel">

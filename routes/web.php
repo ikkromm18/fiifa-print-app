@@ -8,6 +8,7 @@ use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\TransaksiItemController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -75,4 +76,5 @@ Route::middleware(['role:owner'])->group(function () {
     Route::resource('kategori_produk', KategoriProdukController::class)->except(['index', 'show']);
     Route::resource('produk', ProdukController::class)->except(['index', 'show']);
     Route::resource('karyawan', KaryawanController::class)->except(['index', 'show']);
+    Route::resource('users', UserController::class);
 });
