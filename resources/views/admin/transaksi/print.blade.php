@@ -83,7 +83,7 @@
     <p>Terima kasih telah berbelanja!</p>
 
     <h2 style="text-align: center">FiiFa Print</h2>
-    <p>Jalan Lhiend, Kecamatan Comal, Kabupaten Pemalang</p>
+    <p>Jalan Raya Comal-Sragi, RT 02 RW 14 Beji Desa Purwosari, Kecamatan Comal, Kabupaten Pemalang</p>
 </body>
 
 </html>

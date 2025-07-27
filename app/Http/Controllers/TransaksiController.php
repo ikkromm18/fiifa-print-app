@@ -77,6 +77,12 @@ class TransaksiController extends Controller
         $totalBayar = array_sum($request->subtotals);
         $kembalian = $request->jumlah_bayar - $totalBayar;
 
+        if ($request->jumlah_bayar < $totalBayar) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['jumlah_bayar' => 'Jumlah bayar tidak mencukupi. Total yang harus dibayar adalah ' . number_format($totalBayar) . '.']);
+        }
+
         // Buat kode transaksi
         $tanggal = now()->format('dmy');
         $countToday = Transaksi::whereDate('created_at', now())->count() + 1;
