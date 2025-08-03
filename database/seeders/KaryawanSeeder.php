@@ -16,13 +16,18 @@ class KaryawanSeeder extends Seeder
         $data = [
             [
                 'nama_karyawan' => 'Alya',
-                'alamat' => 'Comal',
-                'no_hp' => '082134885973'
+                'alamat' => 'Desa Purwosari',
+                'no_hp' => '083146813961'
             ],
             [
-                'nama_karyawan' => 'Ikrom',
-                'alamat' => 'Wonoyoso',
-                'no_hp' => '082134885973'
+                'nama_karyawan' => 'Eka',
+                'alamat' => 'Desa Purwosari',
+                'no_hp' => '082122154913'
+            ],
+            [
+                'nama_karyawan' => 'Amel',
+                'alamat' => 'Desa Pecangakan',
+                'no_hp' => '085802223831'
             ],
         ];
 

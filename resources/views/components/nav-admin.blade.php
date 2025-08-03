@@ -13,6 +13,8 @@
                         </path>
                     </svg>
                 </button>
+
+                {{-- Logo Kiri --}}
                 <a href="https://flowbite.com" class="flex ms-2 md:me-24">
                     <img src="{{ asset('images/fiifa_logo.png') }}" class="h-8 me-3" alt="FlowBite Logo" />
                     <span
@@ -23,6 +25,8 @@
             <div class="flex items-center">
                 <div class="flex items-center ms-3">
                     <div>
+
+                        {{-- Avatar Kanan --}}
                         <button type="button"
                             class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                             aria-expanded="false" data-dropdown-toggle="dropdown-user">

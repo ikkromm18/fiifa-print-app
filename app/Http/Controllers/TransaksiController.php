@@ -77,6 +77,7 @@ class TransaksiController extends Controller
         $totalBayar = array_sum($request->subtotals);
         $kembalian = $request->jumlah_bayar - $totalBayar;
 
+        // Pengecekan jika uang kurang
         if ($request->jumlah_bayar < $totalBayar) {
             return redirect()->back()
                 ->withInput()
