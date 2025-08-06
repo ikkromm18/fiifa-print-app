@@ -66,7 +66,8 @@ class TransaksiController extends Controller
             $produk = Produk::find($produkId);
             $qty = $request->quantities[$index];
 
-            if ($produk && $produk->stok < $qty) {
+            // Cek hanya jika produk ada dan merupakan kategori produk (bukan jasa)
+            if ($produk && $produk->kategori_produk_id == 1 && $produk->stok < $qty) {
                 return redirect()->back()
                     ->withInput()
                     ->withErrors(['stok' => "Stok untuk produk '{$produk->nama_produk}' tidak mencukupi. Tersisa {$produk->stok}, dibutuhkan {$qty}."]);
@@ -111,9 +112,11 @@ class TransaksiController extends Controller
                 'subtotal' => $request->subtotals[$index],
             ]);
 
-            // Kurangi stok
-            $produk->stok -= $qty;
-            $produk->save();
+            // Kurangi stok jika produk adalah barang
+            if ($produk->kategori_produk_id == 1) {
+                $produk->stok -= $qty;
+                $produk->save();
+            }
         }
 
         return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil disimpan.');

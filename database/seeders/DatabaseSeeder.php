@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
             KategoriProdukSeeder::class,
             ProdukSeeder::class,
             KaryawanSeeder::class,
-            // TransaksiSeeder::class,
+            TransaksiSeeder::class,
             // TransaksiItemSeeder::class
         ]);
     }
