@@ -120,7 +120,12 @@
 
                     </tbody>
                 </table>
+
+                <div class="mt-4">
+                    {{ $penjualan->links() }}
+                </div>
             </div>
+
 
 
         </div>
@@ -153,6 +158,10 @@
                         </tr>
                     </tbody>
                 </table>
+
+                <div class="mt-4">
+                    {{ $keuanganPerTanggal->links() }}
+                </div>
             </div>
         </div>
 
@@ -175,7 +184,7 @@
                                 Tanggal
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Total Bayar
+                                Stok
                             </th>
 
                         </tr>
@@ -200,6 +209,9 @@
                     </tbody>
                 </table>
 
+                <div class="mt-4">
+                    {{ $stok->links() }}
+                </div>
 
             </div>
 
