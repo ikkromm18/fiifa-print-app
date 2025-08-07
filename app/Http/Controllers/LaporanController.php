@@ -77,8 +77,21 @@ class LaporanController extends Controller
         $from = $request->input('from', Carbon::today()->format('Y-m-d'));
         $to = $request->input('to', Carbon::today()->format('Y-m-d'));
 
-        $data = Transaksi::whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])->get();
-        $pdf = PDF::loadView('admin.laporan.penjualan_pdf', compact('data', 'from', 'to'));
+        $transaksi = Transaksi::whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        // Dikelompokkan berdasarkan tanggal
+        $grouped = $transaksi->groupBy(function ($item) {
+            return $item->created_at->format('Y-m-d');
+        });
+
+        $pdf = PDF::loadView('admin.laporan.penjualan_pdf', [
+            'data' => $grouped,
+            'from' => $from,
+            'to' => $to
+        ]);
+
         return $pdf->download("laporan-penjualan-{$from}-{$to}.pdf");
     }
 
