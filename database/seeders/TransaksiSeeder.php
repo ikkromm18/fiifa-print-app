@@ -30,8 +30,8 @@ class TransaksiSeeder extends Seeder
         }
 
         for ($i = 1; $i <= 50; $i++) {
-            // Generate tanggal acak antara 1 - 7 Agustus 2025
-            $createdAt = Carbon::create(2025, 8, 1)->addDays(rand(0, 6))->setTime(rand(8, 17), rand(0, 59));
+            // Generate tanggal antara 1 - 6 Agustus 2025
+            $createdAt = Carbon::create(2025, 8, 1)->addDays(rand(0, 5))->setTime(rand(8, 17), rand(0, 59));
             $kodeTransaksi = $createdAt->format('dmy') . str_pad($i, 3, '0', STR_PAD_LEFT);
 
             $karyawan = $karyawans->random();
@@ -54,14 +54,18 @@ class TransaksiSeeder extends Seeder
                     'subtotal' => $subtotal,
                 ];
 
-                // Kurangi stok hanya jika produk, bukan jasa
+                // Kurangi stok hanya jika produk adalah barang
                 if ($produk->kategori_produk_id == 1 && $produk->stok !== null) {
                     $produk->stok = max(0, $produk->stok - $qty);
                     $produk->save();
                 }
             }
 
-            $jumlahBayar = $totalBayar + $faker->numberBetween(0, 10000);
+            // Tambahkan random uang kembalian, lalu bulatkan ke kelipatan 500
+            $tambahan = $faker->numberBetween(0, 10000);
+            $jumlahBayarKasar = $totalBayar + $tambahan;
+            $jumlahBayar = ceil($jumlahBayarKasar / 1000) * 1000;
+
             $kembalian = $jumlahBayar - $totalBayar;
 
             $transaksi = Transaksi::create([

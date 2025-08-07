@@ -165,54 +165,82 @@ class TransaksiController extends Controller
         $request->validate([
             'karyawans_id' => 'required|exists:karyawans,id',
             'produk_ids' => 'required|array',
+            'produk_ids.*' => 'exists:produks,id',
             'quantities' => 'required|array',
+            'quantities.*' => 'integer|min:1',
             'hargas' => 'required|array',
+            'hargas.*' => 'integer|min:0',
             'subtotals' => 'required|array',
-            'jumlah_bayar' => 'required|numeric|min:0',
+            'subtotals.*' => 'integer|min:0',
+            'jumlah_bayar' => 'required|integer|min:0',
         ]);
 
         $transaksi = Transaksi::findOrFail($id);
-        $transaksi->karyawans_id = $request->karyawans_id;
-        $transaksi->jumlah_bayar = $request->jumlah_bayar;
-        $transaksi->total_bayar = array_sum($request->subtotals);
-        $transaksi->kembalian = $request->jumlah_bayar - $transaksi->total_bayar;
-        $transaksi->save();
 
-        // Kembalikan stok sebelumnya
+        // Kembalikan stok produk lama
         foreach ($transaksi->items as $oldItem) {
             $produk = $oldItem->produk;
-            $produk->stok += $oldItem->quantity;
-            $produk->save();
+            if ($produk && $produk->kategori_produk_id == 1) {
+                $produk->stok += $oldItem->quantity;
+                $produk->save();
+            }
         }
 
         // Hapus item lama
         $transaksi->items()->delete();
 
-        // Simpan item baru dan kurangi stok
-        foreach ($request->produk_ids as $index => $produk_id) {
-            $produk = Produk::findOrFail($produk_id);
-
+        // Cek stok produk baru sebelum simpan
+        foreach ($request->produk_ids as $index => $produkId) {
+            $produk = Produk::find($produkId);
             $qty = $request->quantities[$index];
 
-            if ($produk->stok < $qty) {
-                return back()->withErrors(['msg' => 'Stok untuk produk ' . $produk->nama_produk . ' tidak mencukupi.']);
+            if ($produk && $produk->kategori_produk_id == 1 && $produk->stok < $qty) {
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors(['stok' => "Stok untuk produk '{$produk->nama_produk}' tidak mencukupi. Tersisa {$produk->stok}, dibutuhkan {$qty}."]);
             }
+        }
+
+        // Hitung total bayar dan kembalian
+        $totalBayar = array_sum($request->subtotals);
+        $kembalian = $request->jumlah_bayar - $totalBayar;
+
+        if ($request->jumlah_bayar < $totalBayar) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['jumlah_bayar' => 'Jumlah bayar tidak mencukupi. Total yang harus dibayar adalah ' . number_format($totalBayar) . '.']);
+        }
+
+        // Update transaksi
+        $transaksi->update([
+            'karyawans_id' => $request->karyawans_id,
+            'jumlah_bayar' => $request->jumlah_bayar,
+            'total_bayar' => $totalBayar,
+            'kembalian' => $kembalian,
+        ]);
+
+        // Simpan item baru dan kurangi stok jika barang
+        foreach ($request->produk_ids as $index => $produkId) {
+            $qty = $request->quantities[$index];
+            $produk = Produk::find($produkId);
 
             TransaksiItem::create([
-                'transaksi_id' => $id,
-                'produks_id' => $produk_id,
+                'transaksi_id' => $transaksi->id,
+                'produks_id' => $produkId,
                 'quantity' => $qty,
                 'harga' => $request->hargas[$index],
                 'subtotal' => $request->subtotals[$index],
             ]);
 
-            // Kurangi stok
-            $produk->stok -= $qty;
-            $produk->save();
+            if ($produk && $produk->kategori_produk_id == 1) {
+                $produk->stok -= $qty;
+                $produk->save();
+            }
         }
 
         return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil diupdate.');
     }
+
 
 
 
