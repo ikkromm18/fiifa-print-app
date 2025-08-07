@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class LaporanController extends Controller
 {
@@ -86,7 +87,13 @@ class LaporanController extends Controller
         $from = $request->input('from', Carbon::today()->format('Y-m-d'));
         $to = $request->input('to', Carbon::today()->format('Y-m-d'));
 
-        $data = Transaksi::whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])->get();
+        $transaksi = Transaksi::whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])->get();
+
+        // Kelompokkan berdasarkan tanggal (Y-m-d)
+        $data = $transaksi->groupBy(function ($item) {
+            return $item->created_at->format('Y-m-d');
+        });
+
         $pdf = PDF::loadView('admin.laporan.keuangan_pdf', compact('data', 'from', 'to'));
         return $pdf->download("laporan-keuangan-{$from}-{$to}.pdf");
     }
