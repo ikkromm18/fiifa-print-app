@@ -22,7 +22,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-
+    Route::resource('users', UserController::class)->only('index');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -55,7 +55,7 @@ Route::middleware(['role:owner'])->group(function () {
     Route::resource('kategori_produk', KategoriProdukController::class)->except(['index', 'show']);
     Route::resource('produk', ProdukController::class)->except(['index', 'show']);
     Route::resource('karyawan', KaryawanController::class)->except(['index', 'show']);
-    Route::resource('users', UserController::class);
+    Route::resource('users', UserController::class)->except('index');
 });
 
 // index
